@@ -12,6 +12,12 @@ class LPTest extends TestCase("LPTest") {
     new LPTable(coefficientRow, rowSet, List(2, 3))
   }
 
+  def printWithSep(x: String) {
+    println("----------------------------------")
+    println(x)
+    println("----------------------------------")
+  }
+
   def testProblemCreation() {
     val lpProblem = genProblem1
     assert(lpProblem != null)
@@ -34,6 +40,16 @@ class LPTest extends TestCase("LPTest") {
     val pivCol = lpProblem.selectPivotColumn
     val pivRow = lpProblem.selectPivotRow(pivCol.get)
     Assert.assertEquals(1, pivRow)
+  }
+
+  def testIteration() {
+    val lpProblem = genProblem1
+    printWithSep("Initial state")
+    lpProblem.draw()
+    val nextProblemState = lpProblem.iterate
+    Assert.assertTrue(nextProblemState.isDefined)
+    printWithSep("After pivot")
+    nextProblemState.get.draw()
   }
 }
 
