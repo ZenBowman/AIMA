@@ -51,5 +51,15 @@ class LPTest extends TestCase("LPTest") {
     printWithSep("After pivot")
     nextProblemState.get.draw()
   }
+
+  def testSolver() {
+    val lpProblem = genProblem1
+    printWithSep("Initial state")
+    lpProblem.draw()
+    val solution = SimplexSolver.solve(lpProblem)
+    printWithSep("Solution")
+    solution.draw()
+  }
+
 }
 
