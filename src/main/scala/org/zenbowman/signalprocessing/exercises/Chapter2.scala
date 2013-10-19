@@ -146,6 +146,8 @@ object Chapter2 extends ExerciseHelper {
   }
 
   def main(args: Array[String]) {
+    val sinusoid = for (i <- 0 until 20) yield scala.math.sin(i * (scala.math.Pi/4)).toFloat * 5
+    SignalPlotter.plot("Sinusoid", sinusoid)
     exercise_2_1_a()
     exercise_2_1_c()
     exercise_2_6()
