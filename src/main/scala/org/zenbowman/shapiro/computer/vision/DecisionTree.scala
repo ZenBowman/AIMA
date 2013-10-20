@@ -46,6 +46,46 @@ object DecisionTree {
       entropyOf(possibleOutcomes)
     }
 
+    def numAppearancesOfFeature(featureIndex: Int, featureValue: Boolean): Int = {
+      samples.filter(_.features(featureIndex) == featureValue).size
+    }
+
+    def numAppearancesOfOutcomeAndFeature(outcome: Outcome, featureIndex: Int, featureValue: Boolean): Int = {
+      samples.filter(x => (x.features(featureIndex) == featureValue) && x.outcome == outcome).size
+    }
+
+    def probabilityOfFeature(featureIndex: Int, featureValue: Boolean): Double = {
+      numAppearancesOfFeature(featureIndex, featureValue).toDouble / samples.length
+    }
+
+    def probabilityOfOutcomeAndFeature(outcome: Outcome, featureIndex: Int, featureValue: Boolean): Double = {
+      numAppearancesOfOutcomeAndFeature(outcome, featureIndex, featureValue).toDouble / samples.length
+    }
+
+    def partialInformationContentFor(possibleOutcome: OutcomeSpec, featureIndex: Int, featureValue: Boolean): Double = {
+      val jointProbability = probabilityOfOutcomeAndFeature(possibleOutcome.outcome, featureIndex, featureValue)
+      val productOfProbabilities = possibleOutcome.probability * probabilityOfFeature(featureIndex, featureValue)
+      val jointOverProduct = jointProbability / productOfProbabilities
+      if (jointProbability == 0) {
+        0
+      } else {
+        jointProbability * logBase2(jointOverProduct)
+      }
+
+    }
+
+    def informationContentFor(possibleOutcome: OutcomeSpec, featureIndex: Int) = {
+      val pWhenFeature = partialInformationContentFor(possibleOutcome, featureIndex, true)
+      val pWhenNotFeature = partialInformationContentFor(possibleOutcome, featureIndex, false)
+      pWhenFeature + pWhenNotFeature
+    }
+
+    // The information content of the outcome with respect to the feature in position featureIndex
+    def informationContent(featureIndex: Int) = {
+      (for (possibleOutcome <- possibleOutcomes) yield
+        informationContentFor(possibleOutcome, featureIndex)).sum
+    }
+
     def partition(featureIndex: Int): Iterable[DecisionTreeSet] = {
       val sampleSets = samples.partition(x => x.features(featureIndex))
       List(DecisionTreeSet(sampleSets._1), DecisionTreeSet(sampleSets._2))

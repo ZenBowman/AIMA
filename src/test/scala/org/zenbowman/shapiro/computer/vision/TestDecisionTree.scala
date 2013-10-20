@@ -47,5 +47,10 @@ class TestDecisionTree extends TestCase {
       println(DecisionTree.entropySum(part))
     }
 
+    // Verifies that Quinlan's measure for information gain matches what is shown in
+    // the book
+    Assert.assertEquals(0.311, originalSet.informationContent(0), epsilon)
+    Assert.assertEquals(1.0, originalSet.informationContent(1), epsilon)
+    Assert.assertEquals(0.0, originalSet.informationContent(2), epsilon)
   }
 }
