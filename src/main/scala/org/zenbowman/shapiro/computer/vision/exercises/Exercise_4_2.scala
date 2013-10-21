@@ -1,14 +1,14 @@
 package org.zenbowman.shapiro.computer.vision.exercises
 
-import org.zenbowman.shapiro.computer.vision.DecisionTree
-import org.zenbowman.shapiro.computer.vision.DecisionTree.{DecisionTreeSet, Sample}
+import org.zenbowman.shapiro.computer.vision.{DecisionTreeSet, DecisionTreeTypes}
+import org.zenbowman.shapiro.computer.vision.DecisionTreeTypes.{Sample}
 
 object Exercise_4_2 {
-  val featureless: DecisionTree.Features = List()
-  val outcome1: DecisionTree.Outcome = List(true, false)
-  val outcome2: DecisionTree.Outcome = List(true, true)
-  val outcome3: DecisionTree.Outcome = List(false, false)
-  val outcome4: DecisionTree.Outcome = List(false, true)
+  val featureless: DecisionTreeTypes.Features = List()
+  val outcome1: DecisionTreeTypes.Outcome = List(true, false)
+  val outcome2: DecisionTreeTypes.Outcome = List(true, true)
+  val outcome3: DecisionTreeTypes.Outcome = List(false, false)
+  val outcome4: DecisionTreeTypes.Outcome = List(false, true)
 
   val sample1 = Sample(featureless, outcome1)
   val sample2 = Sample(featureless, outcome2)
