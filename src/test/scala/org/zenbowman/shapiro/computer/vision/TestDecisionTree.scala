@@ -1,7 +1,7 @@
 package org.zenbowman.shapiro.computer.vision
 
 import junit.framework.{Assert, TestCase}
-import org.zenbowman.shapiro.computer.vision.DecisionTreeTypes.{OutcomeSpec}
+import org.zenbowman.shapiro.computer.vision.DecisionTreeTypes.OutcomeSpec
 
 
 class TestDecisionTree extends TestCase {
@@ -56,10 +56,16 @@ class TestDecisionTree extends TestCase {
     val dt = DecisionTreeBuilder.buildDecisionTree(set_4_11)
     println(dt)
 
-
     val set_4_11m = org.zenbowman.shapiro.computer.vision.exercises.Figure_4_11_modified.originalSet
     val dt2 = DecisionTreeBuilder.buildDecisionTree(set_4_11m)
     println(dt2)
 
+    val testSample1: DecisionTreeTypes.Features = List(true, true, true)
+    val outcome = dt.evaluateSample(testSample1)
+    Assert.assertEquals(List(true, false), outcome.outcome)
+
+    val testSample2: DecisionTreeTypes.Features = List(true, false, true)
+    val outcome2 = dt.evaluateSample(testSample2)
+    Assert.assertEquals(List(false, true), outcome2.outcome)
   }
 }

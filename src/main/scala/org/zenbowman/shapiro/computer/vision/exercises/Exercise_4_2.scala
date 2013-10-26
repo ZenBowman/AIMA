@@ -1,7 +1,7 @@
 package org.zenbowman.shapiro.computer.vision.exercises
 
 import org.zenbowman.shapiro.computer.vision.{DecisionTreeSet, DecisionTreeTypes}
-import org.zenbowman.shapiro.computer.vision.DecisionTreeTypes.{Sample}
+import org.zenbowman.shapiro.computer.vision.DecisionTreeTypes.Sample
 
 object Exercise_4_2 {
   val featureless: DecisionTreeTypes.Features = List()
