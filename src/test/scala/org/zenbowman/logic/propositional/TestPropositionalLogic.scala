@@ -19,7 +19,10 @@ class TestPropositionalLogic extends TestCase {
   def testAndElimination() {
     val kb = new KnowledgeBase
     kb.tell(Conjunction('breeze_1_2, 'breeze_2_2))
+    kb.tell('breeze_1_3 ^ 'breeze_2_3)  // Testing the special syntax
     Assert.assertEquals(True, kb.ask('breeze_1_2))
     Assert.assertEquals(True, kb.ask('breeze_2_2))
+    Assert.assertEquals(True, kb.ask('breeze_2_3))
+    Assert.assertEquals(Unknown, kb.ask('breeze_3_3))
   }
 }
