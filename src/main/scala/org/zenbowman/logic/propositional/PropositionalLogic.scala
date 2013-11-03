@@ -34,8 +34,6 @@ object PropositionalLogic {
     def opposite = Negation(this)
   }
 
-  case class BooleanSentence(value: Boolean) extends AtomicSentence
-
   trait ComplexSentence extends Sentence
 
   case class Negation(sentence: Sentence) extends ComplexSentence with Literal {
@@ -55,8 +53,6 @@ object PropositionalLogic {
     override def toString: String = {
       clauses.mkString(" OR ")
     }
-
-
   }
 
   case class Disjunction(sent1: Sentence, sent2: Sentence) extends ComplexSentence {
@@ -80,6 +76,8 @@ object PropositionalLogic {
   implicit def symbolToSentence(symbol: Symbol) = SymbolSentence(symbol)
 
   implicit def symbolsToSentences(symbols: Seq[Symbol]) = for (symbol <- symbols) yield SymbolSentence(symbol)
+
+  implicit def literalToExpandedDisjunction(literal: Literal) = ExpandedDisjunction(List(literal))
 
   case object True
 

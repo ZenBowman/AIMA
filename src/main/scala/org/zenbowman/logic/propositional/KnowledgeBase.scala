@@ -38,8 +38,4 @@ class KnowledgeBase {
       Unknown
     }
   }
-
-  def as3CNF = {
-    for (sentence <- sentences) yield CNFConversion.expandDisjunction(sentence.asInstanceOf[Disjunction])
-  }
 }
