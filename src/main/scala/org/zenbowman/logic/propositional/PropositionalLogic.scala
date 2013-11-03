@@ -26,17 +26,34 @@ object PropositionalLogic {
 
   trait AtomicSentence extends Sentence
 
-  case class SymbolSentence(value: Symbol) extends AtomicSentence
+  case class SymbolSentence(value: Symbol) extends AtomicSentence {
+    override def toString: String = value.toString()
+  }
 
   case class BooleanSentence(value: Boolean) extends AtomicSentence
 
   trait ComplexSentence extends Sentence
 
-  case class Negation(sentence: Sentence) extends ComplexSentence
+  case class Negation(sentence: Sentence) extends ComplexSentence {
+    override def toString: String = {
+      sentence match {
+        case SymbolSentence(s) => "!%s".format(s)
+        case x => "not(%s)".format(x)
+      }
+    }
+  }
 
-  case class Conjunction(sent1: Sentence, sent2: Sentence) extends ComplexSentence
+  case class Conjunction(sent1: Sentence, sent2: Sentence) extends ComplexSentence {
+    override def toString: String = {
+      "%s ^ %s".format(sent1, sent2)
+    }
+  }
 
-  case class Disjunction(sent1: Sentence, sent2: Sentence) extends ComplexSentence
+  case class Disjunction(sent1: Sentence, sent2: Sentence) extends ComplexSentence {
+    override def toString: String = {
+      "%s v %s".format(sent1, sent2)
+    }
+  }
 
   case class Implication(premise: Sentence, consequent: Sentence) extends ComplexSentence
 
