@@ -36,28 +36,33 @@ object PropositionalLogic {
 
   case class Negation(sentence: Sentence) extends ComplexSentence {
     override def toString: String = {
-      sentence match {
-        case SymbolSentence(s) => "!%s".format(s)
-        case x => "not(%s)".format(x)
-      }
+      "NOT(%s)".format(sentence)
     }
   }
 
   case class Conjunction(sent1: Sentence, sent2: Sentence) extends ComplexSentence {
     override def toString: String = {
-      "%s ^ %s".format(sent1, sent2)
+      "(%s AND %s)".format(sent1, sent2)
     }
   }
 
   case class Disjunction(sent1: Sentence, sent2: Sentence) extends ComplexSentence {
     override def toString: String = {
-      "%s v %s".format(sent1, sent2)
+      "(%s OR %s)".format(sent1, sent2)
     }
   }
 
-  case class Implication(premise: Sentence, consequent: Sentence) extends ComplexSentence
+  case class Implication(premise: Sentence, consequent: Sentence) extends ComplexSentence {
+    override def toString: String = {
+      "(%s => %s)".format(premise, consequent)
+    }
+  }
 
-  case class BiConditional(sent1: Sentence, sent2: Sentence) extends ComplexSentence
+  case class BiConditional(sent1: Sentence, sent2: Sentence) extends ComplexSentence {
+    override def toString: String = {
+      "(%s <=> %s)".format(sent1, sent2)
+    }
+  }
 
   implicit def symbolToSentence(symbol: Symbol) = SymbolSentence(symbol)
 
