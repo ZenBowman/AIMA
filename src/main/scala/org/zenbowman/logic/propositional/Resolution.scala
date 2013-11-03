@@ -6,8 +6,7 @@ object Resolution {
 
   import org.zenbowman.logic.propositional.PropositionalLogic._
 
-  def unitResolve(d: Disjunction, m: Literal): ExpandedDisjunction = {
-    val s = CNFConversion.expandDisjunction(d)
+  def unitResolve(s: ExpandedDisjunction, m: Literal): ExpandedDisjunction = {
     val elems = new mutable.HashSet[Sentence]
     for {
       clause <- s.clauses if clause.isInstanceOf[Literal]

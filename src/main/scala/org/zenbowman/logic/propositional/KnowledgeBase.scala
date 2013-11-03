@@ -6,7 +6,7 @@ class KnowledgeBase {
 
   import org.zenbowman.logic.propositional.PropositionalLogic._
 
-  private var sentences = new mutable.HashSet[Sentence]
+  private var sentences = new mutable.HashSet[ExpandedDisjunction]
 
   def dump() {
     for (sent <- sentences) {
@@ -20,10 +20,7 @@ class KnowledgeBase {
       sentence <- newSentences
       sent <- CNFConversion.convertUntilFixedPoint(sentence)
     } {
-      if (!sent.isInstanceOf[Disjunction]) {
-        throw new CNFConversionException(sent)
-      }
-      sentences.add(sent)
+      sentences.add(CNFConversion.asExpandedDisjunction(sent))
     }
 
   }
@@ -33,9 +30,9 @@ class KnowledgeBase {
   }
 
   def ask(sentence: Sentence) = {
-    if (sentences.contains(sentence)) {
+    if (sentences.contains(ExpandedDisjunction(List(sentence)))) {
       True
-    } else if (sentences.contains(Negation(sentence))) {
+    } else if (sentences.contains(ExpandedDisjunction(List(Negation(sentence))))) {
       False
     } else {
       Unknown

@@ -3,7 +3,7 @@ package org.zenbowman.logic.propositional
 object PropositionalLogic {
 
   trait Sentence {
-    def ^ (s2: Sentence) = {
+    def and (s2: Sentence) = {
       Conjunction(this, s2)
     }
 
@@ -11,7 +11,7 @@ object PropositionalLogic {
       Implication(this, s2)
     }
 
-    def v (s2: Sentence) = {
+    def or (s2: Sentence) = {
       Disjunction(this, s2)
     }
 
@@ -51,10 +51,12 @@ object PropositionalLogic {
     }
   }
 
-  case class ExpandedDisjunction(clauses: Seq[Sentence]) {
+  case class ExpandedDisjunction(clauses: Seq[Sentence]) extends Sentence {
     override def toString: String = {
       clauses.mkString(" OR ")
     }
+
+
   }
 
   case class Disjunction(sent1: Sentence, sent2: Sentence) extends ComplexSentence {

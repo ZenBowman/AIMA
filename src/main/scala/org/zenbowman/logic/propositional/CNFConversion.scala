@@ -112,8 +112,8 @@ object CNFConversion {
   }
 
   /*
-   *  Given a disjunction of the form (a v (b v c))
-   *  Returns the sentence (a v b v c)
+   *  Given a disjunction of the form (a or (b or c))
+   *  Returns the sentence (a or b or c)
    *  This is used for converting to 3-CNF after all the conversion rules have been applied
    */
   def expandDisjunction(d: Disjunction): ExpandedDisjunction = {
@@ -123,4 +123,11 @@ object CNFConversion {
     } yield innerElement)
   }
 
+  def asExpandedDisjunction(s: Sentence): ExpandedDisjunction = {
+    s match {
+      case d: Disjunction => expandDisjunction(d)
+      case l: Literal => ExpandedDisjunction(List(l))
+      case _ => throw new CNFConversionException(s)
+    }
+  }
 }

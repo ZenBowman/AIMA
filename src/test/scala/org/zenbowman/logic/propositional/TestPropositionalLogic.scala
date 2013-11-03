@@ -20,7 +20,7 @@ class TestPropositionalLogic extends TestCase {
   def testAndElimination() {
     val kb = new KnowledgeBase
     kb.tell(Conjunction('breeze_1_2, 'breeze_2_2))
-    kb.tell('breeze_1_3 ^ 'breeze_2_3) // Testing the special syntax
+    kb.tell('breeze_1_3 and 'breeze_2_3) // Testing the special syntax
     Assert.assertEquals(True, kb.ask('breeze_1_2))
     Assert.assertEquals(True, kb.ask('breeze_2_2))
     Assert.assertEquals(True, kb.ask('breeze_2_3))
@@ -33,15 +33,15 @@ class TestPropositionalLogic extends TestCase {
    */
   def testNegation() {
     val kb = new KnowledgeBase
-    kb.tell(not('breeze_1_2 v 'breeze_1_1))
+    kb.tell(not('breeze_1_2 or 'breeze_1_1))
     Assert.assertEquals(True, kb.ask(not('breeze_1_2)))
     Assert.assertEquals(False, kb.ask('breeze_1_1))
   }
 
   def testDeMorgans() {
     val kb = new KnowledgeBase
-    kb.tell(not('a ^ 'b))
-    Assert.assertEquals(True, kb.ask(not('a) v not('b)))
+    kb.tell(not('a or 'b))
+    Assert.assertEquals(True, kb.ask(not('a)))
   }
 }
 
