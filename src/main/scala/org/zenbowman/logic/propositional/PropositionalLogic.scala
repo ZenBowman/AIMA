@@ -25,24 +25,35 @@ object PropositionalLogic {
   }
 
   trait AtomicSentence extends Sentence
+  trait Literal extends Sentence {
+    def opposite: Sentence
+  }
 
-  case class SymbolSentence(value: Symbol) extends AtomicSentence {
+  case class SymbolSentence(value: Symbol) extends AtomicSentence with Literal {
     override def toString: String = value.toString()
+    def opposite = Negation(this)
   }
 
   case class BooleanSentence(value: Boolean) extends AtomicSentence
 
   trait ComplexSentence extends Sentence
 
-  case class Negation(sentence: Sentence) extends ComplexSentence {
+  case class Negation(sentence: Sentence) extends ComplexSentence with Literal {
     override def toString: String = {
       "NOT(%s)".format(sentence)
     }
+    def opposite = sentence
   }
 
   case class Conjunction(sent1: Sentence, sent2: Sentence) extends ComplexSentence {
     override def toString: String = {
       "(%s AND %s)".format(sent1, sent2)
+    }
+  }
+
+  case class ExpandedDisjunction(clauses: Seq[Sentence]) {
+    override def toString: String = {
+      clauses.mkString(" OR ")
     }
   }
 

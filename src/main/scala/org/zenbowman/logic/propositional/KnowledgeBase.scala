@@ -16,40 +16,20 @@ class KnowledgeBase {
   }
 
   def tell(newSentences: Seq[Sentence]) {
-    for (sentence <- newSentences) {
-      sentences.add(sentence)
+    for {
+      sentence <- newSentences
+      sent <- CNFConversion.convertUntilFixedPoint(sentence)
+    } {
+      if (!sent.isInstanceOf[Disjunction]) {
+        throw new CNFConversionException(sent)
+      }
+      sentences.add(sent)
     }
-    runInferences()
+
   }
 
   def tell(sentence: Sentence) {
     tell(List(sentence))
-  }
-
-  def runInferences() {
-    var oldSnapshot: List[Sentence] = List()
-    var newSnapshot: List[Sentence] = List()
-    do {
-      oldSnapshot = sentences.toList
-      applyInferenceRules()
-      newSnapshot = sentences.toList
-    } while (oldSnapshot != newSnapshot)
-  }
-
-  def applyInferenceRules() {
-    dump()
-    for (sentence <- sentences) {
-      val newSentences = PropositionalLogicRules.convert(sentence)
-      if (newSentences.isDefined) {
-        sentences.remove(sentence)
-        for {
-          newSentencesV <- newSentences
-          sentence <- newSentencesV
-        } {
-          sentences.add(sentence)
-        }
-      }
-    }
   }
 
   def ask(sentence: Sentence) = {
@@ -60,6 +40,9 @@ class KnowledgeBase {
     } else {
       Unknown
     }
+  }
 
+  def as3CNF = {
+    for (sentence <- sentences) yield CNFConversion.expandDisjunction(sentence.asInstanceOf[Disjunction])
   }
 }
