@@ -25,4 +25,17 @@ class TestPropositionalLogic extends TestCase {
     Assert.assertEquals(True, kb.ask('breeze_2_3))
     Assert.assertEquals(Unknown, kb.ask('breeze_3_3))
   }
+
+  def testNegationSyntax {
+    val kb = new KnowledgeBase
+    kb.tell(not('breeze_1_2))
+
+
+  }
+
+  def testDeMorgans() {
+    val kb = new KnowledgeBase
+    kb.tell(Negation('a ^ 'b))
+    Assert.assertEquals(True, kb.ask(Negation('a) v Negation('b)))
+  }
 }

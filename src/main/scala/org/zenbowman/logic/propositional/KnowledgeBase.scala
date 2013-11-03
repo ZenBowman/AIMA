@@ -50,6 +50,12 @@ class KnowledgeBase {
           tell(Conjunction(Negation(s1), Negation(s2)))
         }
 
+        // Bi-conditional elimination
+        case BiConditional(s1, s2) => {
+          sentences -= sentence
+          tell(Conjunction(Implication(s1, s2), Implication(s2, s1)))
+        }
+
         case _ => ()
       }
     }

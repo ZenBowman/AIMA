@@ -3,9 +3,25 @@ package org.zenbowman.logic.propositional
 object PropositionalLogic {
 
   trait Sentence {
-    def ^ (s2: Sentence): Sentence = {
+    def ^ (s2: Sentence) = {
       Conjunction(this, s2)
     }
+
+    def -> (s2: Sentence) = {
+      Implication(this, s2)
+    }
+
+    def v (s2: Sentence) = {
+      Disjunction(this, s2)
+    }
+
+    def <-> (s2: Sentence) = {
+      BiConditional(this, s2)
+    }
+  }
+
+  case object not {
+    def apply(s1: Sentence) = Negation(s1)
   }
 
   trait AtomicSentence extends Sentence
