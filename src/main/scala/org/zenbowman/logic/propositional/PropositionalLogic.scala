@@ -3,19 +3,19 @@ package org.zenbowman.logic.propositional
 object PropositionalLogic {
 
   trait Sentence {
-    def and (s2: Sentence) = {
+    def and(s2: Sentence) = {
       Conjunction(this, s2)
     }
 
-    def -> (s2: Sentence) = {
+    def ->(s2: Sentence) = {
       Implication(this, s2)
     }
 
-    def or (s2: Sentence) = {
+    def or(s2: Sentence) = {
       Disjunction(this, s2)
     }
 
-    def <-> (s2: Sentence) = {
+    def <->(s2: Sentence) = {
       BiConditional(this, s2)
     }
   }
@@ -25,12 +25,14 @@ object PropositionalLogic {
   }
 
   trait AtomicSentence extends Sentence
+
   trait Literal extends Sentence {
     def opposite: Sentence
   }
 
   case class SymbolSentence(value: Symbol) extends AtomicSentence with Literal {
     override def toString: String = value.toString()
+
     def opposite = Negation(this)
   }
 
@@ -40,6 +42,7 @@ object PropositionalLogic {
     override def toString: String = {
       "NOT(%s)".format(sentence)
     }
+
     def opposite = sentence
   }
 
@@ -49,11 +52,13 @@ object PropositionalLogic {
     }
   }
 
-  case class ExpandedDisjunction(clauses: Seq[Sentence]) extends Sentence {
+  case class ExpandedDisjunction(clauses: Set[Sentence]) extends Sentence {
     override def toString: String = {
       clauses.mkString(" OR ")
     }
   }
+
+  val EMPTY_CLAUSE = ExpandedDisjunction(Set())
 
   case class Disjunction(sent1: Sentence, sent2: Sentence) extends ComplexSentence {
     override def toString: String = {
@@ -77,13 +82,15 @@ object PropositionalLogic {
 
   implicit def symbolsToSentences(symbols: Seq[Symbol]) = for (symbol <- symbols) yield SymbolSentence(symbol)
 
-  implicit def literalToExpandedDisjunction(literal: Literal) = ExpandedDisjunction(List(literal))
+  implicit def literalToExpandedDisjunction(literal: Literal) = ExpandedDisjunction(Set(literal))
 
-  case object True
+  trait TruthValue
 
-  case object False
+  case object True extends TruthValue
 
-  case object Unknown
+  case object False extends TruthValue
+
+  case object Unknown extends TruthValue
 
 }
 

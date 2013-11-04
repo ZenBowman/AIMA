@@ -117,17 +117,24 @@ object CNFConversion {
    *  This is used for converting to 3-CNF after all the conversion rules have been applied
    */
   def expandDisjunction(d: Disjunction): ExpandedDisjunction = {
-    ExpandedDisjunction(for {
+    ExpandedDisjunction((for {
       element <- disjunctionAsElements(d)
       innerElement <- disjunctionAsElements(element)
-    } yield innerElement)
+    } yield innerElement).toSet)
   }
 
   def asExpandedDisjunction(s: Sentence): ExpandedDisjunction = {
     s match {
       case d: Disjunction => expandDisjunction(d)
-      case l: Literal => ExpandedDisjunction(List(l))
+      case l: Literal => ExpandedDisjunction(Set(l))
       case _ => throw new CNFConversionException(s)
     }
+  }
+
+  /*
+   *  Currently only works correctly for literals
+   */
+  def toExpandedDisjunction(s: Sentence): ExpandedDisjunction = {
+    asExpandedDisjunction(convertUntilFixedPoint(s).head)
   }
 }

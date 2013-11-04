@@ -22,20 +22,21 @@ class KnowledgeBase {
     } {
       sentences.add(CNFConversion.asExpandedDisjunction(sent))
     }
-
   }
 
   def tell(sentence: Sentence) {
     tell(List(sentence))
   }
 
-  def ask(sentence: Sentence) = {
-    if (sentences.contains(ExpandedDisjunction(List(sentence)))) {
-      True
-    } else if (sentences.contains(ExpandedDisjunction(List(Negation(sentence))))) {
-      False
-    } else {
-      Unknown
+  def ask(l: Literal): TruthValue = {
+    val d = CNFConversion.toExpandedDisjunction(l)
+    val notD = CNFConversion.toExpandedDisjunction(l.opposite)
+    if (sentences.contains(d)) {
+      return True
+    } else if (sentences.contains(notD)) {
+      return False
     }
+
+    Resolution.testResolution(sentences.toSet, notD)
   }
 }
