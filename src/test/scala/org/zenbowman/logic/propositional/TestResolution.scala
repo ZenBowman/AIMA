@@ -27,10 +27,14 @@ class TestResolution extends TestCase {
     kb.tell(not('a))
     kb.tell('b -> 'c)
     kb.tell('a <-> 'd)
+    kb.tell('b or 'e)
+    kb.tell('f -> 'e)
+    kb.tell('f or not('e))
 
     Assert.assertEquals(True, kb.ask('b))
     Assert.assertEquals(False, kb.ask('a))
     Assert.assertEquals(True, kb.ask('c))
     Assert.assertEquals(False, kb.ask('d))
+    Assert.assertEquals(Unknown, kb.ask('e))
   }
 }

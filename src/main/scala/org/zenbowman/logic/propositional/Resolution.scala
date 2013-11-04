@@ -32,23 +32,26 @@ object Resolution {
 
   def resolve(s1: ExpandedDisjunction, s2: ExpandedDisjunction): Seq[ExpandedDisjunction] = {
     for (c <- getComplimentaryLiteral(s1, s2)) {
-      val allPossibleClauses = new mutable.HashSet[Sentence]()
       val allClauses = new mutable.HashSet[Sentence]
 
-      s1.clauses.foreach(x => allPossibleClauses.add(x))
-      s2.clauses.foreach(x => allPossibleClauses.add(x))
+      for (elem <- s1.clauses if elem != c) {
+        allClauses.add(elem)
+      }
 
-      for {
-        elem <- allPossibleClauses
-        l = elem.asInstanceOf[Literal]
-      } {
-        if (!((l == c) || (l == c.opposite))) {
-          allClauses.add(l)
-        }
+      for (elem <- s2.clauses if elem != c.opposite) {
+        allClauses.add(elem)
       }
 
       if (allClauses.size == 0) {
         throw new EmptyClauseException(s1, s2)
+      }
+
+      if (allClauses.size == 2) {
+        val elem1 = allClauses.head.asInstanceOf[Literal]
+        val elem2 = allClauses.tail.head
+        if (elem1.opposite == elem2) {
+          return List()
+        }
       }
 
       val newClause = ExpandedDisjunction(allClauses.toSet)
@@ -63,9 +66,6 @@ object Resolution {
   def testResolution(s: Set[ExpandedDisjunction], e: ExpandedDisjunction): TruthValue = {
     try {
       val newElements = resolution(s.union(Set(e)))
-      if (newElements.subsetOf(s)) {
-        return False
-      }
     } catch {
       case e: EmptyClauseException =>
         println(e.toString)
@@ -75,6 +75,20 @@ object Resolution {
   }
 
   def resolution(s: Set[ExpandedDisjunction]): Set[ExpandedDisjunction] = {
+    val all = new mutable.HashSet[ExpandedDisjunction]()
+    var newSet: Set[ExpandedDisjunction] = Set()
+    while(true) {
+      newSet = resolutionOnce(s.union(all))
+      if (newSet.subsetOf(all)) {
+        return all.toSet
+      } else {
+        all ++= newSet
+      }
+    }
+    Set()
+  }
+
+  def resolutionOnce(s: Set[ExpandedDisjunction]): Set[ExpandedDisjunction] = {
     val newSet = new mutable.HashSet[ExpandedDisjunction]()
     for (c_i <- s) {
       for (c_j <- s if c_j != c_i) {
