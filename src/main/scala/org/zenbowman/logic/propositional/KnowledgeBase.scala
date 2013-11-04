@@ -22,6 +22,8 @@ class KnowledgeBase {
     } {
       sentences.add(CNFConversion.asExpandedDisjunction(sent))
     }
+    val newCNFs = Resolution.resolution(sentences.toSet)
+    sentences ++= newCNFs
   }
 
   def tell(sentence: Sentence) {

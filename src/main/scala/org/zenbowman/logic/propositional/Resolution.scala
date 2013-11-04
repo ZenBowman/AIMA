@@ -31,7 +31,6 @@ object Resolution {
   }
 
   def resolve(s1: ExpandedDisjunction, s2: ExpandedDisjunction): Seq[ExpandedDisjunction] = {
-    println("Resolving %s with %s".format(s1, s2))
     for (c <- getComplimentaryLiteral(s1, s2)) {
       val allPossibleClauses = new mutable.HashSet[Sentence]()
       val allClauses = new mutable.HashSet[Sentence]
@@ -52,8 +51,9 @@ object Resolution {
         throw new EmptyClauseException(s1, s2)
       }
 
-      println("Result = %s".format(ExpandedDisjunction(allClauses.toSet)))
-      return List(ExpandedDisjunction(allClauses.toSet))
+      val newClause = ExpandedDisjunction(allClauses.toSet)
+      println("Resolved %s and %s to: %s".format(s1, s2, newClause))
+      return List(newClause)
     }
 
     List()
