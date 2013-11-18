@@ -59,6 +59,11 @@ object FirstOrderLogic {
     override def toString = name
   }
 
+
+  //TODO: In order to do unification, a variable MUST belong to a sentence
+  //   Otherwise an 'x' in one sentence will be thought of as the same
+  //   as an 'x' in another sentence
+  //   Any instantiated variable must also have a quantifier type
   case class Variable(name: String) extends Term {
     override def toString = name
   }
