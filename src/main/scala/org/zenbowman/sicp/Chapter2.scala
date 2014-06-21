@@ -4,9 +4,13 @@ import scala.math
 
 object Chapter2 {
 
+
   def apply(exercise: String) {
     println("=========")
     println("Chapter 2")
+    println(s"Exercise $exercise")
+    println("=========")
+
     exercise match {
       case "1" =>
         Exercise1()
@@ -40,9 +44,6 @@ object Chapter2 {
     }
 
     def apply() {
-      println("Exercise 1")
-      println("=========")
-
       printRat(3, 5)
       printRat(-2, -3)
       printRat(5, -7)
